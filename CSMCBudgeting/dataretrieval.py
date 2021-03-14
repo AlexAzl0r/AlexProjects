@@ -31,7 +31,6 @@ class QueryDataTables:
     def run(self):
         query = self.read_query_from_file()
         returned_data = self.run_query_file(query.replace('xxxx', self.table_name))
-        print(returned_data)
         return returned_data
 
 
