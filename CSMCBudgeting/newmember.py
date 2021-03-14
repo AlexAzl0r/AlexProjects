@@ -7,9 +7,11 @@ parser = argparse.ArgumentParser(description='A test program.')
 
 parser.add_argument("--name", help="Name of member.")
 parser.add_argument("--datejoined", help="Date joined - format YYYY-MM-DD")
-parser.add_argument("--dateleft", help="Date Left, leave blank if new member", nargs='?',default=None)
+parser.add_argument("--dateleft", help="Date Left, leave blank if new member", nargs='?', default=None)
 
 args = parser.parse_args()
+
+
 class MembershipUpdate:
     def __init__(self, name, date_joined, connection, date_left=None):
         self.name = name
@@ -34,6 +36,7 @@ class MembershipUpdate:
     def run(self):
         update_new_member = self.format_new_member()
         self.output_to_database(update_new_member)
+
 
 if __name__ == "__main__":
     job = MembershipUpdate(connection=None,
