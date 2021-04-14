@@ -35,5 +35,5 @@ class QueryDataTables:
 
 
 if __name__ == "__main__":
-    job = QueryDataTables(table_name=args.table,query_name=args.query)
+    job = QueryDataTables(table_name=args.table, query_name=args.query)
     job.run()
