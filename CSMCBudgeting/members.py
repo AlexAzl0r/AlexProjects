@@ -11,14 +11,17 @@ class Members:
         self.config = config
         self.member_data = existing_data
 
-    def add_new_member(self, name, date_of_birth, date_joined, rank_joined):
+    def add_new_member(self, name: str, date_of_birth: str, date_joined: str, rank_joined: str):
+        new_row = pd.DataFrame(
+            [{"Name": name, "DOB": date_of_birth, "DateJoined": date_joined, "RankJoined": rank_joined}])
+        new_row['DOB'] = pd.to_datetime(new_row['DOB'])
+        if new_row['Name'] in self.member_data:
+            raise Exception
+
+        return new_row
+
+    def update_existing_member(self):
         pass
-
-    def update_existing_member(self, rows):
-        pass
-
-
-
 
 
 def output_to_database(data: pd.DataFrame, connection=None, server="csmc.db", table_name=None):
