@@ -2,14 +2,18 @@ import datetime as dt
 import sqlite3
 from arguments import args_new_member
 import pandas as pd
+from config import Config
+from sqlalchemy import MetaData, Table, Column, Integer, create_engine
 
 args = args_new_member().parse_args()
 
+def connect_to_members_table(sql):
+    engine = create_engine(Config.engine)
 
 class Members:
-    def __init__(self, config, existing_data):
+    def __init__(self, config):
         self.config = config
-        self.member_data = existing_data
+        self.sql_data = config.sql_conn
 
     def add_new_member(self, name: str, date_of_birth: str, date_joined: str, rank_joined: str):
         new_row = pd.DataFrame(
@@ -22,6 +26,8 @@ class Members:
 
     def update_existing_member(self):
         pass
+
+    def increment_subs_for_active_members(self,):
 
 
 def output_to_database(data: pd.DataFrame, connection=None, server="csmc.db", table_name=None):

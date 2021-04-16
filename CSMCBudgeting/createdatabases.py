@@ -1,14 +1,38 @@
-import sqlite3
+from sqlalchemy import create_engine, ForeignKey
+from sqlalchemy import Column, Date, Integer, String, Boolean, Numeric
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship, sessionmaker
 
-conn = sqlite3.connect("csmc.db")
-conn.execute("PRAGMA foreign_keys = 1")
-c = conn.cursor()
+engine = create_engine('sqlite:///D:\\Programs\\GIT\\AlexProjects\\CSMCBudeting\\Databases\\CSMC.db', echo=True)
+Base = declarative_base()
 
-c.execute(
-    """CREATE TABLE MEMBERS([id] INTEGER PRIMARY KEY,[memberName] text, [dateFrom] datetime, [dateLeft] datetime, [active] bool)""")
-c.execute(
-    """ CREATE TABLE SUBS([id] INTEGER PRIMARY KEY,[dateDue] date, [amount] real,[memberId] int, FOREIGN KEY (memberId) REFERENCES MEMBERS (id))""")
-c.execute(
-    """ CREATE TABLE DEBTS([id] INTEGER PRIMARY KEY, [paid] bool, [name] text, [notes] text, [startDate] date, [datePaid] date, [memberId] int, [subId] int, FOREIGN KEY (memberId) REFERENCES MEMBERS (id),FOREIGN KEY (subId) REFERENCES SUBS (id))""")
 
-conn.commit()
+class Members(Base):
+
+    __tablename__ = "members"
+
+    id = Column(Integer, primary_key=True)
+    name = Column('Name', String)
+    date_joined = Column('dateJoined', Date)
+    date_left = Column('dateLeft', Date)
+    is_active = Column('isActive', Boolean)
+
+
+class Subs(Base):
+
+    __tablename__ = "subscriptions"
+
+    id = Column(Integer, primary_key=True)
+    amount = Column('amount', Numeric(10, 2))
+    date_created = Column('dateActive', Date)
+    date_settled = Column('dateSettled', Date, nullable=True)
+    name = Column('name', String)
+    type = Column('type', String)
+    member_id = Column(Integer, ForeignKey("members.id"))
+    member = relationship("Members")
+
+
+Session = sessionmaker(bind=engine)
+
+session = Session
+print(session)
