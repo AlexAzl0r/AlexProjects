@@ -10,7 +10,7 @@ class Config:
     subs_table = "SUBS"
     debts_table = "DEBTS"
     conn = sqlite3.connect(database)
-    engine = sqlalchemy.create_engine('sqlite:////D:/Programs/GIT/AlexProjects/csmc.db/')
+    engine = sqlalchemy.create_engine('sqlite:///csmc.db')
 
 if __name__ == "__main__":
     test = pd.read_sql('select * from MEMBERS', Config.engine)
