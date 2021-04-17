@@ -2,8 +2,9 @@ from sqlalchemy import create_engine, ForeignKey
 from sqlalchemy import Column, Date, Integer, String, Boolean, Numeric
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
+from config import Config
 
-engine = create_engine('sqlite:///CSMC.db', echo=True)
+engine = create_engine(Config.csmc_engine, echo=True)
 Base = declarative_base()
 
 

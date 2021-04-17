@@ -1,19 +1,42 @@
-import datetime as dt
-import sqlite3
+
 from arguments import args_new_member
 import pandas as pd
 from config import Config
-from sqlalchemy import MetaData, Table, Column, Integer, create_engine
+from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String
+from createdatabases import Members
 
 args = args_new_member().parse_args()
 
-def connect_to_members_table(sql):
-    engine = create_engine(Config.engine)
+
+def validate_table_columns(table, engine, new_table=None):
+    options = ['Members', 'Remittance', 'Inventory', 'Payments']
+    if new_table:
+        options.append(new_table)
+
+    if table in options:
+        try:
+            cols = pd.read_sql(f"SELECT TOP(1) * FROM {table}", engine)
+            return cols.columns.values.tolist()
+
+        except Exception as e:
+            print(e)
+
+    else:
+        print(f"failed to query {table}, it doesn't exist.")
+
+
 
 class Members:
-    def __init__(self, config):
+    def __init__(self, config, table):
         self.config = config
-        self.sql_data = config.sql_conn
+        self.sql_connection = config.sql_conn
+        self.table = table
+
+
+    def retrieve_members(self):
+        connection = self.config.csmc_engine
+        members = pd.read_sql('SELECT * FROM MEMBERS', connection)
+        return members
 
     def add_new_member(self, name: str, date_of_birth: str, date_joined: str, rank_joined: str):
         new_row = pd.DataFrame(
@@ -24,8 +47,12 @@ class Members:
 
         return new_row
 
-    def update_existing_member(self):
-        pass
+
+    def update_existing_member(self, member_name, new_value):
+        connection = self.sql_connection.connect()
+        updater = self.table.update().where(members.name=member_name.values(col=new_value))
+        connection.execute(updater)
+        return updater
 
     def increment_subs_for_active_members(self,):
 

@@ -1,5 +1,5 @@
 import sqlite3
-import sqlalchemy
+
 import pandas as pd
 
 class Config:
@@ -9,10 +9,9 @@ class Config:
     member_table = "MEMBERS"
     subs_table = "SUBS"
     debts_table = "DEBTS"
-    conn = sqlite3.connect(database)
-    engine = sqlalchemy.create_engine('sqlite:///csmc.db')
+    csmc_engine = 'sqlite:///CSMC.db'
 
 if __name__ == "__main__":
-    test = pd.read_sql('select * from MEMBERS', Config.engine)
+    test = pd.read_sql('select * from MEMBERS', Config.csmc_engine)
 
     print(test.head())
