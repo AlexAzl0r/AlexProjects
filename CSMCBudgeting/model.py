@@ -13,12 +13,12 @@ class Members(Base):
     __tablename__ = "members"
 
     id = Column(BigInteger, primary_key=True, autoincrement=True)
-    name = Column('Name', String)
+    name = Column('Name', String, unique=True)
     dateJoined = Column('dateJoined', Date)
     dateLeft = Column('dateLeft', Date, nullable=True, default=None)
     isActive = Column('isActive', Boolean, default=1)
     remittance = relationship("Remittance", back_populates="members")
-    __table_args__ = (UniqueConstraint(name),)
+
 
 class Remittance(Base):
 

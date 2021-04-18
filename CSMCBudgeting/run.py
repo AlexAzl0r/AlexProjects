@@ -10,7 +10,7 @@ member_object = Membership(Config, Members)
 
 
 # Adds Member
-member_object.add_new_member("Madara Dziedataja", "2021-04-18")
+# member_object.add_new_member("Madara Dziedataja", "2021-04-18")
 
 # Updates Member
 # update_alex = member_object.update_existing_member("Vern Spicer", "dateLeft", "2021-04-18")
