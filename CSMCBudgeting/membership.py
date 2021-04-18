@@ -39,8 +39,8 @@ class Membership:
 
 
 
-    def retrieve_members(self):
-        statement = f"""SELECT * FROM Members"""
+    def query_all_members(self):
+        statement = f"""SELECT * FROM {self.table.__table__}"""
         data = pd.read_sql(statement, self.engine.engine, index_col='id')
         return data
 

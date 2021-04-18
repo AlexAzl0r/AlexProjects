@@ -8,8 +8,9 @@ from model import Members
 
 member_object = Membership(Config, Members)
 
+update_alex = member_object.update_existing_member("Vern Spicer", "dateLeft", None)
 
-updatealex = member_object.update_existing_member("Vern Spicer", "dateLeft", None)
-resultset = member_object.retrieve_members()
-print(resultset)
+result_set = member_object.query_all_members()
+
+print(result_set)
 
