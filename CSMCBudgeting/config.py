@@ -1,17 +1,18 @@
 import sqlite3
-
+from sqlalchemy import create_engine
 import pandas as pd
 
 class Config:
-    sql_dir = "SQLQueries"
-    select_all_query = "SELECTDATA.sql"
-    database = "csmc.db"
+
     member_table = "MEMBERS"
-    subs_table = "SUBS"
-    debts_table = "DEBTS"
-    csmc_engine = 'sqlite:///CSMC.db'
+    subs_table = "Remittance"
+    debts_table = "Payments"
+    inventory_table = "Inventory"
+
+    database = 'sqlite:///CSMC.db'
+    database_engine = create_engine(database)
 
 if __name__ == "__main__":
-    test = pd.read_sql('select * from MEMBERS', Config.csmc_engine)
+    test = pd.read_sql('select * from MEMBERS', Config.database_engine.engine)
 
-    print(test.head())
+    print(test.tail())
