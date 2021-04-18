@@ -8,9 +8,16 @@ from model import Members
 
 member_object = Membership(Config, Members)
 
-update_alex = member_object.update_existing_member("Vern Spicer", "dateLeft", None)
 
+# Adds Member
+member_object.add_new_member("Madara Dziedataja", "2021-04-18")
+
+# Updates Member
+# update_alex = member_object.update_existing_member("Vern Spicer", "dateLeft", "2021-04-18")
+
+# Queries all Members
 result_set = member_object.query_all_members()
-
 print(result_set)
 
+# Deletes all data (cant be undone)
+# member_object.delete_row()

@@ -1,10 +1,10 @@
 from sqlalchemy import create_engine, ForeignKey
-from sqlalchemy import Column, Date, Integer, String, Boolean, Numeric
+from sqlalchemy import Column, Date, Integer, String, Boolean, Numeric, BigInteger, UniqueConstraint
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 from config import Config
 
-engine = create_engine(Config.database, echo=True)
+engine = Config.database_engine
 Base = declarative_base()
 
 
@@ -12,13 +12,13 @@ class Members(Base):
 
     __tablename__ = "members"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(BigInteger, primary_key=True, autoincrement=True)
     name = Column('Name', String)
     dateJoined = Column('dateJoined', Date)
-    dateLeft = Column('dateLeft', Date)
+    dateLeft = Column('dateLeft', Date, nullable=True, default=None)
     isActive = Column('isActive', Boolean, default=1)
     remittance = relationship("Remittance", back_populates="members")
-
+    __table_args__ = (UniqueConstraint(name),)
 
 class Remittance(Base):
 
@@ -60,7 +60,5 @@ class Payments(Base):
     remittanceId = Column(Integer, ForeignKey("remittance.id"))
 
 
-
-# Session = sessionmaker(bind=engine)
-
 Base.metadata.create_all(engine)
+

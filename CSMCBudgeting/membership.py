@@ -1,12 +1,8 @@
 
 from arguments import args_new_member
 import pandas as pd
-from model import Members
-from sqlalchemy import select
+
 from sqlalchemy.orm import sessionmaker
-
-from config import Config
-
 
 args = args_new_member().parse_args()
 
@@ -37,21 +33,16 @@ class Membership:
         self.table = table
         self.session = sessionmaker(bind=self.engine)
 
-
-
     def query_all_members(self):
         statement = f"""SELECT * FROM {self.table.__table__}"""
-        data = pd.read_sql(statement, self.engine.engine, index_col='id')
+        data = pd.read_sql(statement, self.engine.engine)
         return data
 
-    def add_new_member(self, name: str, date_of_birth: str, date_joined: str, rank_joined: str):
-        new_row = pd.DataFrame(
-            [{"Name": name, "DOB": date_of_birth, "DateJoined": date_joined, "RankJoined": rank_joined}])
-        new_row['DOB'] = pd.to_datetime(new_row['DOB'])
-        if new_row['Name'] in self.member_data:
-            raise Exception
+    def add_new_member(self, member_name: str, date_joined: str):
+        session = self.session()
+        session.add(self.table(name=member_name, dateJoined=pd.to_datetime(date_joined)))
 
-        return new_row
+        session.commit()
 
     def update_existing_member(self, member_name, col_to_update, new_value):
         session = self.session()
@@ -71,5 +62,10 @@ class Membership:
 
         updater.update(data_to_update)
 
+        session.commit()
+
+    def delete_row(self):
+        session = self.session()
+        delete_all = session.query(self.table).delete()
         session.commit()
 
