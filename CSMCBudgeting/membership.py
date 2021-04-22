@@ -1,7 +1,7 @@
 
 from arguments import args_new_member
 import pandas as pd
-
+from sqlalchemy import text
 from sqlalchemy.orm import sessionmaker
 
 args = args_new_member().parse_args()
@@ -34,7 +34,7 @@ class Membership:
         self.session = sessionmaker(bind=self.engine)
 
     def query_all_members(self):
-        statement = f"""SELECT * FROM {self.table.__table__}"""
+        statement = text("""SELECT * FROM :table""", {self.table.__table__})
         data = pd.read_sql(statement, self.engine.engine)
         return data
 
