@@ -1,1 +1,0 @@
-INSERT INTO {}.{} (memberName,dateFrom, dateLeft, active) VALUES ({},{},{},{})

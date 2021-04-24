@@ -1,27 +1,28 @@
-from sqlalchemy import create_engine, ForeignKey
-from sqlalchemy import Column, Date, Integer, String, Boolean, Numeric, BigInteger, UniqueConstraint
+from sqlalchemy import Column, Date, Integer, String, Boolean, Numeric
+from sqlalchemy import ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship, sessionmaker
-from config import Config
+from sqlalchemy.orm import relationship
+
+from CSMCBudgeting.config import Config
 
 engine = Config.database_engine
 Base = declarative_base()
 
 
 class Members(Base):
-
     __tablename__ = "members"
 
-    id = Column(BigInteger, primary_key=True, autoincrement=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column('Name', String, unique=True)
     dateJoined = Column('dateJoined', Date)
     dateLeft = Column('dateLeft', Date, nullable=True, default=None)
     isActive = Column('isActive', Boolean, default=1)
     remittance = relationship("Remittance", back_populates="members")
 
+    __table_args = {'sqlite_autoincrement': True}
+
 
 class Remittance(Base):
-
     __tablename__ = "remittance"
 
     id = Column(Integer, primary_key=True)
@@ -39,18 +40,17 @@ class Remittance(Base):
 
 
 class Inventory(Base):
-
     __tablename__ = "inventory"
 
     id = Column(Integer, primary_key=True)
     name = Column('name', String)
+    price = Column('price', Numeric(10, 2), default=None, nullable=True)
     dateAdded = Column('dateAdded', Date)
     dateLeft = Column('dateLeft', Date, nullable=True)
     remittance = relationship("Remittance", uselist=False, back_populates="inventory")
 
 
 class Payments(Base):
-
     __tablename__ = "payments"
 
     id = Column(Integer, primary_key=True)
@@ -61,4 +61,3 @@ class Payments(Base):
 
 
 Base.metadata.create_all(engine)
-
