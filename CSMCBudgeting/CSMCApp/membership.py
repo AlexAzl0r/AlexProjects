@@ -6,7 +6,7 @@ import pandas as pd
 from sqlalchemy import text
 from sqlalchemy.orm import sessionmaker
 
-from CSMCBudgeting.arguments import args_new_member
+from CSMCBudgeting.TODO.arguments import args_new_member
 
 args = args_new_member().parse_args()
 
