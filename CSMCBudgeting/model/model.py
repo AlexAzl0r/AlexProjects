@@ -5,7 +5,7 @@ from sqlalchemy.orm import relationship
 
 from CSMCBudgeting.config import Config
 
-engine = Config.database_engine
+engine = Config.model_database_engine
 Base = declarative_base()
 
 
@@ -25,7 +25,7 @@ class Members(Base):
 class Remittance(Base):
     __tablename__ = "remittance"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     amount = Column('amount', Numeric(10, 2))
     datCreated = Column('dateActive', Date)
     dateSettled = Column('dateSettled', Date, nullable=True)
@@ -42,7 +42,7 @@ class Remittance(Base):
 class Inventory(Base):
     __tablename__ = "inventory"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column('name', String)
     price = Column('price', Numeric(10, 2), default=None, nullable=True)
     dateAdded = Column('dateAdded', Date)
@@ -53,7 +53,7 @@ class Inventory(Base):
 class Payments(Base):
     __tablename__ = "payments"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     amount = Column('amount', Numeric(10, 2))
     dateCreated = Column('dateCreated', Date)
     datePaid = Column('datePaid', Date)

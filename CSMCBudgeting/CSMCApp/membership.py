@@ -12,10 +12,10 @@ args = args_new_member().parse_args()
 
 
 class Membership:
-    def __init__(self, config, table):
+    def __init__(self, config, sql_table):
         self.__config = config
         self.__engine = config.database_engine
-        self.__table = table
+        self.__table = sql_table
 
     def __create_session(self):
         session = sessionmaker(bind=self.__engine)
@@ -24,12 +24,11 @@ class Membership:
     def __member_validator(self, member_name):
         session = self.__create_session()
         member_record = session.query(self.__table).filter(self.__table.name == member_name).all()
-        print(type(member_record))
 
         return member_record
 
     def query_all_members(self):
-        statement = text("""SELECT * FROM MEMBERS""")
+        statement = text("""SELECT * FROM members""")
         data = pd.read_sql(statement, self.__engine.engine)
 
         return data
@@ -38,7 +37,6 @@ class Membership:
         member_validation = self.__member_validator(member_name=member_name)
 
         session = self.__create_session()
-        print(member_validation)
 
         if len(member_validation) == 0:
             session.add(self.__table(name=member_name, dateJoined=pd.to_datetime(date_joined)))
