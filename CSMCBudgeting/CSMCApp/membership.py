@@ -23,7 +23,7 @@ class Membership:
 
     def __member_validator(self, member_name):
         session = self.__create_session()
-        member_record = session.query(self.__table).filter(self.__table.name == member_name).all()
+        member_record = session.query(self.__table).filter(name=member_name).scalar()
 
         return member_record
 
@@ -46,8 +46,21 @@ class Membership:
             raise Exception(f"Cannot add {member_name}, they already exist")
 
     def update_existing_member(self, member_name, col_to_update, new_value):
-        session = self.__create_session()
-        updater = session.query(self.__table).filter(self.__table.name == member_name)
+        with self.__create_session() as session:
+
+            exists = session.query(
+                session.query(self.__table).filter_by(name=member_name).exists()
+            ).scalar()
+            if not exists:
+
+                raise Exception(f"{member_name} does not exist")
+
+            else:
+                try:
+                    updater = session.query(self.__table).filter(self.__table.member_name == member_name)
+                except Exception as e:
+                    print(e)
+
         date_cols = ["dateLeft", "dateJoined"]
 
         if col_to_update in date_cols:
@@ -73,7 +86,7 @@ class Membership:
                 session.query(self.__table).delete()
             else:
                 try:
-                    session.query(self.__table).filter(self.__table.name == member_name).delete()
+                    session.query(self.__table).filter(self.__table.member_name == member_name).delete()
                 except Exception as e:
                     print(f"Could not delete {member_name} - {e}")
             session.commit()
