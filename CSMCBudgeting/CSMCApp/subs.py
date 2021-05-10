@@ -126,3 +126,6 @@ class DebtManager:
 
             session.execute(query)
             session.commit()
+
+    def update_remittance(self, date, type):
+        date = datetime.datetime.strptime("%Y-%m-%d")
