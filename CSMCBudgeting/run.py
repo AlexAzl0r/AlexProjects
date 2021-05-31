@@ -1,7 +1,6 @@
 from CSMCBudgeting.CSMCApp.membership import Membership
-from CSMCBudgeting.CSMCApp.subs import MonthlySubscriptions, OutstandingDebts, DebtManager
-from CSMCBudgeting.CSMCApp.inventory import InventoryFactory
-from CSMCBudgeting.model.model import Members, Remittance
+from CSMCBudgeting.CSMCApp.subs import OutstandingDebts, DebtManager
+from CSMCBudgeting.CSMCApp.model import Members, Remittance
 from config import Config
 
 member_object = Membership(Config, Members)
