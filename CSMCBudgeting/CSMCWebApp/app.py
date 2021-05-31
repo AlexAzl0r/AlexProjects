@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from flask import Flask, request, render_template, redirect
+from flask import Flask, request, render_template, redirect, abort
 import datetime
 
 app = Flask(__name__)
@@ -67,7 +67,7 @@ def update(member_id):
     member = Members.query.filter_by(id=member_id).first()
     if request.method == 'POST':
         if member:
-            print(member)
+
             name = member.name
             date_joined = member.dateJoined
 
@@ -94,6 +94,19 @@ def update(member_id):
         return f"No members with id: {member_id} exist"
 
     return render_template('memberupdate.html', member=member)
+
+
+@app.route('/data/<int:id>/delete', methods=['GET', 'POST'])
+def delete(id):
+    member = Members.query.filter_by(id=id).first()
+    if request.method == 'POST':
+        if member:
+            db.session.delete(member)
+            db.session.commit()
+            return redirect('/data')
+        abort(404)
+
+    return render_template('delete.html')
 
 
 if __name__ == "__main__":
