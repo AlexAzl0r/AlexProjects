@@ -83,10 +83,10 @@ class Membership:
         session = self.__create_session()
         with session as session:
             if member_name is None:
-                session.query(self.__table).delete()
+                session.query(self.__table).delete_member()
             else:
                 try:
-                    session.query(self.__table).filter(self.__table.member_name == member_name).delete()
+                    session.query(self.__table).filter(self.__table.member_name == member_name).delete_member()
                 except Exception as e:
                     print(f"Could not delete {member_name} - {e}")
             session.commit()

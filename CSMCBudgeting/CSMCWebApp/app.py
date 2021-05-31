@@ -1,32 +1,19 @@
-from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, request, render_template, redirect, abort
+from model import Members, db
 import datetime
 
+# Initial configuration, setting up instance of application
 app = Flask(__name__)
-
-db = SQLAlchemy()
-
-
-class Members(db.Model):
-    __tablename__ = "members"
-
-    id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
-    name = db.Column(db.String(), unique=True)
-    dateJoined = db.Column(db.Date())
-    dateLeft = db.Column(db.Date(), nullable=True, default=None)
-    isActive = db.Column(db.Boolean(), default=1)
-
-    def __repr__(self):
-        return f"{self.name}:{self.id}"
-
-
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///CSMC.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 db.init_app(app)
+
 
 @app.before_first_request
 def create_table():
     db.create_all()
+
 
 @app.route("/")
 def home():
@@ -71,7 +58,7 @@ def update(member_id):
             name = member.name
             date_joined = member.dateJoined
 
-            db.session.delete(member)
+            db.session.delete_member(member)
             db.session.commit()
 
             date_left = request.form['date_left']
@@ -86,7 +73,8 @@ def update(member_id):
                 date_left = None
                 is_active = 1
 
-            member_update = Members(id=member_id, name=name, dateJoined=date_joined, dateLeft=date_left, isActive=is_active)
+            member_update = Members(id=member_id, name=name, dateJoined=date_joined, dateLeft=date_left,
+                                    isActive=is_active)
 
             db.session.add(member_update)
             db.session.commit()
@@ -97,11 +85,11 @@ def update(member_id):
 
 
 @app.route('/data/<int:id>/delete', methods=['GET', 'POST'])
-def delete(id):
-    member = Members.query.filter_by(id=id).first()
+def delete_member(member_id):
+    member = Members.query.filter_by(id=member_id).first()
     if request.method == 'POST':
         if member:
-            db.session.delete(member)
+            db.session.delete_member(member)
             db.session.commit()
             return redirect('/data')
         abort(404)
