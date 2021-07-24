@@ -2,8 +2,9 @@ import datetime
 import os
 
 from flask import Flask, render_template, request
-from model import Members
 from flask_sqlalchemy import SQLAlchemy
+
+from model import Members
 
 db = SQLAlchemy()
 
@@ -20,7 +21,6 @@ db = SQLAlchemy(app)
 @app.route('/', methods=['GET', 'POST'])
 def home():
     if request.form:
-
         new_member = Members(name=request.form.get("membername"), dateJoined=request.form.get("dateadded"))
         db.session.add(new_member)
         db.session.commit()

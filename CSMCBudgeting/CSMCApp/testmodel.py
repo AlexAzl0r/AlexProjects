@@ -4,7 +4,6 @@ db = SQLAlchemy()
 
 
 class Members(db.Model):
-
     id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     name = db.Column(db.String(), unique=True)
     dateJoined = db.Column(db.Date())
@@ -13,4 +12,3 @@ class Members(db.Model):
 
     def __repr__(self):
         return f"{self.name} inserted, id: {self.id}"
-

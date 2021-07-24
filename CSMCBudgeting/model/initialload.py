@@ -1,5 +1,5 @@
 import pandas as pd
-from sqlalchemy import create_engine
+
 from CSMCBudgeting.config import Config
 
 members = [{"id": None, "name": "Alex Neville",
@@ -28,7 +28,7 @@ members = [{"id": None, "name": "Alex Neville",
 
 session = Config.model_database_engine
 members = pd.DataFrame.from_dict(members, orient='columns').sort_values(by="id", ascending=True)
-members.update(members.select_dtypes('datetime').stack().dt.date.unstack())
+members.update_member(members.select_dtypes('datetime').stack().dt.date.unstack())
 # members = members.drop(columns='id')
 print(members)
 members.to_sql("members", session.engine, if_exists="append", index=False)

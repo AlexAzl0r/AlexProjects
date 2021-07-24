@@ -121,8 +121,7 @@ class DebtManager:
             if date:
                 date_active = pd.to_datetime(filtered_resultset['dateActive']).dt.date.item()
                 date_portion = f""" AND dateActive >= '{date_active}'"""
-                query = query+date_portion
-
+                query = query + date_portion
 
             session.execute(query)
             session.commit()

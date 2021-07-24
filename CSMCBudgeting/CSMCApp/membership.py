@@ -3,10 +3,9 @@ Membership class - just stuff to create/retrieve/update/delete member data
 """
 
 import pandas as pd
+from CSMCBudgeting.TODO.arguments import args_new_member
 from sqlalchemy import text
 from sqlalchemy.orm import sessionmaker
-
-from CSMCBudgeting.TODO.arguments import args_new_member
 
 args = args_new_member().parse_args()
 
@@ -72,11 +71,11 @@ class Membership:
 
         if col_to_update == "dateLeft":
             if new_value:
-                updater.update({'isActive': 0})
+                updater.update_member({'isActive': 0})
             else:
-                updater.update({'isActive': 1})
+                updater.update_member({'isActive': 1})
 
-        updater.update(data_to_update)
+        updater.update_member(data_to_update)
         session.commit()
 
     def delete_row(self, member_name=None):

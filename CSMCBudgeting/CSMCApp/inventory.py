@@ -1,7 +1,4 @@
-
 import pandas as pd
-
-
 
 
 class InventoryFactory:

@@ -1,6 +1,8 @@
-from flask import Flask, request, render_template, redirect, abort
-from model import Members, db
 import datetime
+
+from flask import Flask, request, render_template, redirect, abort
+
+from model import Members, db
 
 # Initial configuration, setting up instance of application
 app = Flask(__name__)
@@ -17,13 +19,13 @@ def create_table():
 
 @app.route("/")
 def home():
-    return "Healthy"
+    return render_template("index.html")
 
 
 @app.route('/data/create', methods=['GET', 'POST'])
 def get_new_member_data():
     if request.method == 'GET':
-        return render_template('newdata.html')
+        return render_template('create_new_member.html')
 
     if request.method == 'POST':
         new_member_name = request.form['member_name']
@@ -38,6 +40,13 @@ def get_new_member_data():
 @app.route('/data')
 def retrieve_all_member_data():
     members = Members.query.all()
+
+    return render_template('memberlist.html', members=members)
+
+@app.route('/data/active_members')
+def retrieve_active_member_data():
+    members = Members.query.filter_by(isActive=True)
+
     return render_template('memberlist.html', members=members)
 
 
@@ -50,15 +59,14 @@ def retrieve_single_member_data(id):
 
 
 @app.route('/data/<int:member_id>/update', methods=['GET', 'POST'])
-def update(member_id):
+def update_member(member_id):
     member = Members.query.filter_by(id=member_id).first()
     if request.method == 'POST':
         if member:
 
             name = member.name
             date_joined = member.dateJoined
-
-            db.session.delete_member(member)
+            db.session.delete(member)
             db.session.commit()
 
             date_left = request.form['date_left']
@@ -84,18 +92,27 @@ def update(member_id):
     return render_template('memberupdate.html', member=member)
 
 
+@app.route('/data/delete')
+def redirect_to_members():
+    members = Members.query.all()
+    for member in members:
+        print(member.id)
+    return render_template('member_delete_list.html', members=members)
+
+
 @app.route('/data/<int:id>/delete', methods=['GET', 'POST'])
-def delete_member(member_id):
-    member = Members.query.filter_by(id=member_id).first()
+def delete_member(id):
+    member = Members.query.filter_by(id=id).first()
+    print(member)
     if request.method == 'POST':
         if member:
-            db.session.delete_member(member)
+            db.session.delete(member)
             db.session.commit()
-            return redirect('/data')
+            return redirect('/data/delete')
         abort(404)
 
     return render_template('delete.html')
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)

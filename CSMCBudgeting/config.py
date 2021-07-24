@@ -12,6 +12,7 @@ class Config:
     model_database_engine = create_engine(model_database)
     database_engine = create_engine(database)
 
+
 if __name__ == "__main__":
     test = pd.read_sql('select * from inventory', Config.database_engine.engine)
 

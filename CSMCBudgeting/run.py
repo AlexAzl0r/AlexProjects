@@ -1,6 +1,6 @@
 from CSMCBudgeting.CSMCApp.membership import Membership
-from CSMCBudgeting.CSMCApp.subs import OutstandingDebts, DebtManager
 from CSMCBudgeting.CSMCApp.model import Members, Remittance
+from CSMCBudgeting.CSMCApp.subs import OutstandingDebts, DebtManager
 from config import Config
 
 member_object = Membership(Config, Members)
@@ -26,7 +26,7 @@ member_object = Membership(Config, Members)
 # subscriptions.commit_new_subs_to_database(new_subs)
 # print(new_subs)
 
-#Active remittance
+# Active remittance
 remittanceobject = OutstandingDebts(Config, "foo", "bar")
 unpaid = remittanceobject.get_all_unpaid_remittance()
 print(unpaid)
